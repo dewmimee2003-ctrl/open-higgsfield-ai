@@ -1,4 +1,5 @@
 import { getModelById, getVideoModelById } from './models.js';
+import { higgsfield } from './higgsfield.js';
 
 export class MuapiClient {
     constructor() {
@@ -161,9 +162,17 @@ export class MuapiClient {
     }
 
     async generateVideo(params) {
-        const key = this.getKey();
-
         const modelInfo = getVideoModelById(params.model);
+
+        if (modelInfo?.provider === 'higgsfield') {
+            const input = { prompt: params.prompt };
+            if (params.aspect_ratio) input.aspect_ratio = params.aspect_ratio;
+            if (params.duration) input.duration = params.duration;
+            if (params.resolution) input.resolution = params.resolution;
+            return higgsfield.generate(modelInfo.endpoint, input);
+        }
+
+        const key = this.getKey();
         const endpoint = modelInfo?.endpoint || params.model;
         const url = `${this.baseUrl}/api/v1/${endpoint}`;
 

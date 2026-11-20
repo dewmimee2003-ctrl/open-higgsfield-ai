@@ -11,6 +11,11 @@ export default defineConfig({
                 target: 'https://api.muapi.ai',
                 changeOrigin: true,
                 secure: false
+            },
+            '/higgsfield': {
+                target: 'https://api.higgsfield.ai',
+                changeOrigin: true,
+                rewrite: (path) => path.replace(/^\/higgsfield/, '')
             }
         }
     }

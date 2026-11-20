@@ -2077,6 +2077,18 @@ export const t2vModels = [
     }
   },
   {
+    "id": "kling-v4.0-text-to-video",
+    "name": "Kling 4.0",
+    "provider": "higgsfield",
+    "endpoint": "kling-video/v4.0/text-to-video",
+    "inputs": {
+      "prompt": { "type": "string", "title": "Prompt", "name": "prompt", "description": "Subject, action, scene, lighting and camera movement." },
+      "aspect_ratio": { "enum": ["16:9", "9:16", "1:1", "21:9"], "title": "Aspect Ratio", "name": "aspect_ratio", "type": "string", "description": "Aspect ratio of the output video.", "default": "16:9" },
+      "duration": { "enum": [3, 5, 10, 15, 20, 25, 30], "title": "Duration", "name": "duration", "type": "int", "description": "Output duration in seconds (3-30).", "default": 10 },
+      "resolution": { "enum": ["720p", "1080p"], "title": "Resolution", "name": "resolution", "type": "string", "description": "Output resolution.", "default": "1080p" }
+    }
+  },
+  {
     "id": "kling-v2.1-master-t2v",
     "name": "Kling v2.1 Master",
     "inputs": {

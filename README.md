@@ -21,6 +21,7 @@ For a deep dive into the technical architecture and the philosophy behind the "I
 - **Smart Controls** — Dynamic aspect ratio and resolution pickers that adapt to each model's capabilities
 - **Generation History** — Browse, revisit, and download all your past generations (persisted in browser storage). Now with a persistent sidebar in Cinema Studio.
 - **Image Download** — One-click download of generated images in full resolution (up to 4K)
+- **Kling 4.0 via Higgsfield** — Video Studio includes Kling 4.0 text-to-video (3–30s, 720p/1080p, 21:9/16:9/9:16/1:1), called directly on the Higgsfield API. Add your `KEY_ID:KEY_SECRET` under Settings → Higgsfield API Key.
 - **API Key Management** — Secure API key storage in browser localStorage (never sent to any server except Muapi)
 - **Responsive Design** — Works seamlessly on desktop and mobile with dark glassmorphism UI
 
