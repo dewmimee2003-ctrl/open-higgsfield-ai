@@ -1,6 +1,7 @@
 import { muapi } from '../lib/muapi.js';
 import { t2vModels, getAspectRatiosForVideoModel, getDurationsForModel, getResolutionsForVideoModel } from '../lib/models.js';
 import { AuthModal } from './AuthModal.js';
+import { SettingsModal } from './SettingsModal.js';
 
 export function VideoStudio() {
     const container = document.createElement('div');
@@ -133,13 +134,15 @@ export function VideoStudio() {
     dropdown.className = 'absolute bottom-[102%] left-2 z-50 transition-all opacity-0 pointer-events-none scale-95 origin-bottom-left glass rounded-3xl p-3 translate-y-2 w-[calc(100vw-3rem)] max-w-xs shadow-4xl border border-white/10 flex flex-col';
 
     const updateControlsForModel = (modelId) => {
+        const model = t2vModels.find(m => m.id === modelId);
         const availableArs = getAspectRatiosForVideoModel(modelId);
         selectedAr = availableArs[0];
         document.getElementById('v-ar-btn-label').textContent = selectedAr;
 
         const durations = getDurationsForModel(modelId);
         if (durations.length > 0) {
-            selectedDuration = durations[0];
+            const defaultDuration = model?.inputs?.duration?.default;
+            selectedDuration = durations.includes(defaultDuration) ? defaultDuration : durations[0];
             document.getElementById('v-duration-btn-label').textContent = `${selectedDuration}s`;
             durationBtn.style.display = 'flex';
         } else {
@@ -148,7 +151,8 @@ export function VideoStudio() {
 
         const resolutions = getResolutionsForVideoModel(modelId);
         if (resolutions.length > 0) {
-            selectedResolution = resolutions[0];
+            const defaultResolution = model?.inputs?.resolution?.default;
+            selectedResolution = resolutions.includes(defaultResolution) ? defaultResolution : resolutions[0];
             document.getElementById('v-resolution-btn-label').textContent = selectedResolution;
             resolutionBtn.style.display = 'flex';
         } else {
@@ -491,8 +495,12 @@ export function VideoStudio() {
         const prompt = textarea.value.trim();
         if (!prompt) return;
 
-        const apiKey = localStorage.getItem('muapi_key');
-        if (!apiKey) {
+        const usesHiggsfield = t2vModels.find(m => m.id === selectedModel)?.provider === 'higgsfield';
+        if (usesHiggsfield && !localStorage.getItem('higgsfield_key')) {
+            document.body.appendChild(SettingsModal());
+            return;
+        }
+        if (!usesHiggsfield && !localStorage.getItem('muapi_key')) {
             AuthModal(() => generateBtn.click());
             return;
         }

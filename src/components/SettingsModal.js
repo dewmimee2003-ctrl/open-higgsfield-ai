@@ -37,6 +37,18 @@ export function SettingsModal(onClose) {
     input.style.width = '100%';
     input.style.marginBottom = '1rem';
 
+    const hfLabel = document.createElement('label');
+    hfLabel.textContent = 'Higgsfield API Key (for Kling 4.0)';
+    hfLabel.className = 'block text-sm text-secondary mb-2';
+
+    const hfInput = document.createElement('input');
+    hfInput.type = 'password';
+    hfInput.className = 'w-full mb-4 p-2 rounded bg-input border border-border-color';
+    hfInput.value = localStorage.getItem('higgsfield_key') || '';
+    hfInput.placeholder = 'KEY_ID:KEY_SECRET';
+    hfInput.style.width = '100%';
+    hfInput.style.marginBottom = '1rem';
+
     const btnContainer = document.createElement('div');
     btnContainer.className = 'flex justify-end gap-2';
     btnContainer.style.display = 'flex';
@@ -60,8 +72,15 @@ export function SettingsModal(onClose) {
 
     saveBtn.onclick = () => {
         const key = input.value.trim();
-        if (key) {
-            localStorage.setItem('muapi_key', key);
+        const hfKey = hfInput.value.trim();
+        if (hfKey && !/^[^:\s]+:[^:\s]+$/.test(hfKey)) {
+            alert('Higgsfield key must be in the form KEY_ID:KEY_SECRET');
+            return;
+        }
+        if (key || hfKey) {
+            if (key) localStorage.setItem('muapi_key', key);
+            if (hfKey) localStorage.setItem('higgsfield_key', hfKey);
+            else localStorage.removeItem('higgsfield_key');
             alert('API Key saved!');
             document.body.removeChild(overlay);
             if (onClose) onClose();
@@ -73,6 +92,8 @@ export function SettingsModal(onClose) {
     modal.appendChild(title);
     modal.appendChild(label);
     modal.appendChild(input);
+    modal.appendChild(hfLabel);
+    modal.appendChild(hfInput);
 
     btnContainer.appendChild(cancelBtn);
     btnContainer.appendChild(saveBtn);
